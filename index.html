@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>リンク共有メモ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>リンク共有メモ</h1>
+  </header>
+
+  <div id="wrapper">
+    <div id="post">
+      <div class="post-header">
+        <input type="text" id="title" placeholder="title">
+        <input type="text" id="uname" placeholder="name">
+      </div>
+      <div>
+        <textarea id="text" placeholder="memo"></textarea>
+        <br>
+        <input id="link" placeholder="link"></input>
+        <br>
+        <div class="send-box">
+          <button id="send">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="output-box">
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+      from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+    const firebaseConfig = {
+      apiKey: "",
+      authDomain: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app); //RealtimeDBに接続
+    const dbRef = ref(db, "chat"); //RealtimeDB内の"chat"を使う
+
+    var time = "";
+    $(function getTime() {
+      var now = new Date();
+      var year = now.getFullYear();
+      var month = now.getMonth() + 1;
+      var date = now.getDate();
+      var w = now.getDay();
+      var wd = ["日", "月", "火", "水", "木", "金", "土"];
+      var week = wd[w];
+      var hour = now.getHours();
+      var minute = now.getMinutes();
+      var second = now.getSeconds();
+
+      time = year + "年" + month + "月" + date + "日" + "（" + week + "）" + hour + ":" + minute + ":" + second;
+    });
+
+    //データ登録(Click)
+    $("#send").on("click", function () {
+      const msg = {
+        title: $("#title").val(),
+        uname: $("#uname").val(),
+        text: $("#text").val(),
+        link: $("#link").val(),
+        created: new Date()
+      }
+      const newPostRef = push(dbRef); //ユニークKEYを生成
+      set(newPostRef, msg);
+
+      // 文字を空にする
+      $("#title").val("")
+      $("#text").val("")
+      $("#link").val("")
+
+      var element = $("#output")[0];
+      element.scrollIntoView(false);
+
+      $("#output").scrollTop($("#output")[0].scrollHeight);
+    });
+
+    //データ登録(Enter)
+    $("#text").on("keydown", function (e) {
+      console.log(e);
+      if (e.keyCode == 13) {
+        const msg = {
+          title: $("#title").val(),
+          uname: $("#uname").val(),
+          text: $("#text").val(),
+          link: $("#link").val(),
+          created: new Date()
+        }
+        const newPostRef = push(dbRef); //ユニークKEYを生成
+        set(newPostRef, msg);
+
+        // 文字を空にする
+        $("#title").val("")
+      $("#text").val("")
+      $("#link").val("")
+
+      // スクロールバーを一番下に
+        $("#output").scrollTop($("#output")[0].scrollHeight);
+      }
+
+    });
+
+    //最初にデータ取得＆onSnapshotでリアルタイムにデータを取得
+    onChildAdded(dbRef, function (data) {
+      const msg = data.val();
+      const key = data.key;
+
+      //表示用テキスト・HTMLを作成
+      let h = `
+  <div id="box">
+
+    ${msg.title !== undefined ?  `<p><span class="title">${msg.title}</span><br>` : ''}
+    ${msg.text}</p>
+    ${msg.link !== undefined ? `<p class="linktext"><a href="${msg.link}" target="_blank">${msg.link}</a></p>` : ''}
+    <p class="box-footer">
+      ${msg.uname !== undefined ?  `<span class="name">${msg.uname}</span>` : ''}
+      <span id="now">${time}</span>
+      </p>
+    
+  </div>
+  `;
+      $("#output").append(h);
+
+    });
+
+
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+
+#wrapper {
+  margin: 0 auto -100px auto;
+  display: flex;
+  max-height: 650px;
+}
+
+header{
+  height: 50px;
+  margin: -10px -10px 20px -10px;
+  box-shadow: 0px 5px 5px 0px rgba(194, 194, 194, 0.5);
+  padding-left: 30px;
+}
+.title {
+  font-weight: bold;
+}
+
+.name {
+  margin-right: 10px;
+}
+
+
+.box-footer {
+  text-align: right;
+}
+
+.post-header {
+  display: flex;
+  width: 95%;
+}
+
+#uname, #title {
+  margin-bottom: 5px;
+}
+#title {
+  width: 40%;
+}
+#uname {
+  width: 70%;
+  margin-left: 5px;
+}
+
+#post {
+  margin-bottom: 5px;
+  max-height: 650px;
+  width: 100%;
+  padding: 10px;
+}
+
+#output-box {
+  max-height: 650px;
+  width: 100%;
+}
+
+.send-box {
+  text-align: right;
+  margin-right: 5%;
+}
+
+input , textarea {
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  background: #e2e2e2;
+  color: #363636;
+  border: none;
+  font-weight: normal;
+}
+
+button {
+  width: 120px;
+  height: 40px;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  border: none;
+  background-color: dodgerblue;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.7;
+}
+
+#text {
+  width: 90%;
+  height: 80px;
+}
+
+#link {
+  width: 90%;
+  margin-bottom: 5px;
+}
+
+#now {
+  font-size: 10px;
+  color: gray;
+  text-align:right
+}
+
+#output {
+  overflow: scroll;
+  width: 580px;
+  height: 600px;
+  border: 2px solid black;
+  padding: 10px;
+}
+
+#box{
+  margin: 20px auto 20px auto;
+  width: 450px;
+  min-height: 80px;
+  border-bottom: 1px dashed blue;
+  padding: 10px 10px 10px 15px;
+}
+
+a {
+  color: dodgerblue;
+}
+
+.delete-button {
+  cursor: pointer;
+}
